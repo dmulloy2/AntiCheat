@@ -18,13 +18,7 @@
 
 package net.gravitydevelopment.anticheat.config.holders.mysql;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.config.ConfigurationTable;
-import net.gravitydevelopment.anticheat.config.providers.Lang;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
@@ -33,6 +27,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.config.Configuration;
+import net.gravitydevelopment.anticheat.config.ConfigurationTable;
+import net.gravitydevelopment.anticheat.config.providers.Lang;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.google.common.base.Charsets;
 
 public class MySQLLangHolder extends ConfigurationTable implements InvocationHandler {
 
@@ -49,7 +53,10 @@ public class MySQLLangHolder extends ConfigurationTable implements InvocationHan
 
     @Override
     public void open() {
-        defaults = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("lang.yml"));
+        // dmulloy2 start - specify charset
+        InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("lang.yml"), Charsets.UTF_8);
+        defaults = YamlConfiguration.loadConfiguration(reader);
+        // dmulloy2 end
 
         stringValues = new HashMap<String, String>();
         listValues = new HashMap<String, List<String>>();

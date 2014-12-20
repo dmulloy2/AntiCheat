@@ -22,6 +22,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.command.CommandBase;
 import net.gravitydevelopment.anticheat.util.Calibrator;
 import net.gravitydevelopment.anticheat.util.Permission;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,6 +42,7 @@ public class CommandCalibrate extends CommandBase {
 
     @Override
     protected void execute(CommandSender cs, String[] args) {
+        @SuppressWarnings("unused")
         Calibrator c = new Calibrator(AntiCheat.getPlugin(), (Player) cs);
     }
 }

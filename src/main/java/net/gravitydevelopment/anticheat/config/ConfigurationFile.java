@@ -18,13 +18,17 @@
 
 package net.gravitydevelopment.anticheat.config;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.config.yaml.CommentedConfiguration;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.common.base.Charsets;
 
 public class ConfigurationFile {
 
@@ -58,7 +62,10 @@ public class ConfigurationFile {
         this.saveDefault = saveDefault;
 
         if (saveDefault) {
-            defaultConfigFile = YamlConfiguration.loadConfiguration(plugin.getResource(fileName));
+            // dmulloy2 start - specify charset
+            InputStreamReader reader = new InputStreamReader(plugin.getResource(fileName), Charsets.UTF_8);
+            defaultConfigFile = YamlConfiguration.loadConfiguration(reader);
+            // dmulloy2 end
         }
         load();
     }
@@ -132,9 +139,7 @@ public class ConfigurationFile {
     }
 
     public class ConfigValue<T> {
-
         private String path;
-
         private Object value = null;
 
         private boolean didLoadDefault;
@@ -161,6 +166,7 @@ public class ConfigurationFile {
             return path;
         }
 
+        @SuppressWarnings("unchecked")
         public T getValue() {
             return (T) value;
         }
@@ -171,6 +177,7 @@ public class ConfigurationFile {
             return value;
         }
 
+        @SuppressWarnings("unchecked")
         public T getDefaultValue() {
             return (T) getDefaultConfigFile().get(path);
         }

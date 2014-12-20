@@ -19,6 +19,7 @@
 package net.gravitydevelopment.anticheat.util;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +30,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +47,30 @@ public final class Utilities {
     private static final Map<Material, Material> COMBO = new HashMap<Material, Material>();
 
     public static final String SPY_METADATA = "ac-spydata";
+
+    // dmulloy2 start - backwards compatiblity
+    private static Method getOnlinePlayers;
+
+    /**
+     * Gets a list of online Players. This also provides backwards compatibility
+     * as Bukkit changed <code>getOnlinePlayers</code>.
+     *
+     * @return A list of online Players
+     */
+    @SuppressWarnings("unchecked")
+    public static List<Player> getOnlinePlayers() {
+        try {
+            // Provide backwards compatibility
+            if (getOnlinePlayers == null)
+                getOnlinePlayers = Bukkit.class.getMethod("getOnlinePlayers");
+            if (getOnlinePlayers.getReturnType() != Collection.class)
+                return Arrays.asList((Player[]) getOnlinePlayers.invoke(null));
+        } catch (Throwable ex) {
+        }
+        return (List<Player>) Bukkit.getOnlinePlayers();
+    }
+
+    // dmulloy2 end
 
     /**
      * Send a hack level alert to players and console
@@ -455,9 +483,12 @@ public final class Utilities {
      * @param string the string to parse
      * @return ArrayList with string
      */
-    public static ArrayList<String> stringToList(final String string) {
-        return new ArrayList<String>() {{ add(string); }};
+    // dmulloy2 start - use more efficient Arrays.asList()
+    public static List<String> stringToList(final String string) {
+        // return new ArrayList<String>() {{ add(string); }};
+        return Arrays.asList(string);
     }
+    // dmulloy2 end
 
     /**
      * Create a comma-delimited string from a list

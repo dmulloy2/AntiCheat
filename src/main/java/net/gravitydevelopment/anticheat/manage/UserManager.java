@@ -24,8 +24,10 @@ import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.util.Group;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.BanList.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +46,8 @@ public class UserManager {
      * @param manager The AntiCheat Manager
      */
     public UserManager(AntiCheatManager manager) {
-        this.manager = manager;
-        this.config = manager.getConfiguration();
+        UserManager.manager = manager;
+        UserManager.config = manager.getConfiguration();
     }
 
     /**
@@ -240,7 +242,10 @@ public class UserManager {
                             }
                         }
                     } else if (event.equalsIgnoreCase("BAN")) {
-                        user.getPlayer().setBanned(true);
+                        // dmulloy2 start - use BanList
+                        Bukkit.getBanList(Type.NAME).addBan(user.getName(), banReason, null, "AntiCheat");
+                        // user.getPlayer().setBanned(true);
+                        // dmulloy2 end
                         user.getPlayer().kickPlayer(RED + banReason);
                         String msg = RED + config.getLang().BAN_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
                         if (!msg.equals("")) {

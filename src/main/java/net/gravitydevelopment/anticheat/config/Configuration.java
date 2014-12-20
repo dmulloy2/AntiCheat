@@ -18,19 +18,34 @@
 
 package net.gravitydevelopment.anticheat.config;
 
-import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.config.files.Config;
-import net.gravitydevelopment.anticheat.config.files.Enterprise;
-import net.gravitydevelopment.anticheat.config.holders.mysql.*;
-import net.gravitydevelopment.anticheat.config.holders.yaml.*;
-import net.gravitydevelopment.anticheat.config.providers.*;
-import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import net.gravitydevelopment.anticheat.AntiCheat;
+import net.gravitydevelopment.anticheat.config.files.Config;
+import net.gravitydevelopment.anticheat.config.files.Enterprise;
+import net.gravitydevelopment.anticheat.config.holders.mysql.MySQLGroupsHolder;
+import net.gravitydevelopment.anticheat.config.holders.mysql.MySQLLangHolder;
+import net.gravitydevelopment.anticheat.config.holders.mysql.MySQLLevelsHolder;
+import net.gravitydevelopment.anticheat.config.holders.mysql.MySQLMagicHolder;
+import net.gravitydevelopment.anticheat.config.holders.mysql.MySQLRulesHolder;
+import net.gravitydevelopment.anticheat.config.holders.yaml.YamlGroupsHolder;
+import net.gravitydevelopment.anticheat.config.holders.yaml.YamlLangHolder;
+import net.gravitydevelopment.anticheat.config.holders.yaml.YamlLevelsHolder;
+import net.gravitydevelopment.anticheat.config.holders.yaml.YamlMagicHolder;
+import net.gravitydevelopment.anticheat.config.holders.yaml.YamlRulesHolder;
+import net.gravitydevelopment.anticheat.config.providers.Groups;
+import net.gravitydevelopment.anticheat.config.providers.Lang;
+import net.gravitydevelopment.anticheat.config.providers.Levels;
+import net.gravitydevelopment.anticheat.config.providers.Magic;
+import net.gravitydevelopment.anticheat.config.providers.Rules;
+import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Configuration {
 
@@ -44,8 +59,9 @@ public class Configuration {
     private Levels levels;
     private Rules rules;
 
-    private ArrayList<ConfigurationFile> flatfiles;
-    private ArrayList<ConfigurationTable> dbfiles;
+    // dmulloy2 - changed to List
+    private List<ConfigurationFile> flatfiles;
+    private List<ConfigurationTable> dbfiles;
 
     public Configuration(AntiCheat plugin, AntiCheatManager manager) {
         removeOldFiles();
@@ -55,10 +71,11 @@ public class Configuration {
         // Now load others
         enterprise = new Enterprise(plugin, this);
 
-        flatfiles = new ArrayList<ConfigurationFile>() {{
+        flatfiles = Arrays.asList(config, enterprise); // dmulloy2
+        /* flatfiles = new ArrayList<ConfigurationFile>() {{
             add(config);
             add(enterprise);
-        }};
+        }}; */
 
         dbfiles = new ArrayList<ConfigurationTable>();
 

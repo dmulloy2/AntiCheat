@@ -3,12 +3,11 @@
 package net.gravitydevelopment.anticheat.util;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
+
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-
-import java.util.HashMap;
 
 public class Calibrator {
 
@@ -16,8 +15,8 @@ public class Calibrator {
     private final Server server;
     private final Player player;
 
-    private HashMap<String, Integer> ints = new HashMap<String, Integer>();
-    private HashMap<String, Double> doubles = new HashMap<String, Double>();
+    // private HashMap<String, Integer> ints = new HashMap<String, Integer>();
+    // private HashMap<String, Double> doubles = new HashMap<String, Double>();
 
     public Calibrator(AntiCheat plugin, Player player) {
         this.plugin = plugin;

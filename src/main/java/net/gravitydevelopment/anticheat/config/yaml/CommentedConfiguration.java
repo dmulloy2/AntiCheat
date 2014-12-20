@@ -181,7 +181,9 @@ public class CommentedConfiguration extends YamlConfiguration {
      * @param stream Input stream
      * @return Resulting configuration
      * @throws IllegalArgumentException Thrown if stream is null
+     * @deprecated Does not specify charset
      */
+    @Deprecated
     public static CommentedConfiguration loadConfiguration(InputStream stream) {
         Validate.notNull(stream, "Stream cannot be null");
 

@@ -106,7 +106,7 @@ public class Rule {
     }
 
     public Rule(String string, Type type) {
-        this.string = Utilities.removeWhitespace(string).toLowerCase();
+        Rule.string = Utilities.removeWhitespace(string).toLowerCase();
         this.type = type;
     }
 
@@ -131,8 +131,8 @@ public class Rule {
         for (Type type : Type.values()) {
             if (type.matches(string)) {
                 try {
-                    Class c = Class.forName(type.getInstance());
-                    Constructor con = c.getConstructor(String.class);
+                    Class<?> c = Class.forName(type.getInstance());
+                    Constructor<?> con = c.getConstructor(String.class);
                     return (Rule) con.newInstance(string);
                 } catch (Exception ex) {
                     ex.printStackTrace();

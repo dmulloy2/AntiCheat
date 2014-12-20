@@ -22,9 +22,13 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.config.ConfigurationTable;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.google.common.base.Charsets;
+
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -46,7 +50,10 @@ public class MySQLMagicHolder extends ConfigurationTable implements InvocationHa
 
     @Override
     public void open() {
-        defaults = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("magic.yml"));
+        // dmulloy2 start - specify charset
+        InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("magic.yml"), Charsets.UTF_8);
+        defaults = YamlConfiguration.loadConfiguration(reader);
+        // dmulloy2 end
 
         ints = new HashMap<String, Integer>();
         doubles = new HashMap<String, Double>();

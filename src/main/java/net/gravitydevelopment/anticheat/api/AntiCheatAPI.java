@@ -25,6 +25,7 @@ import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.manage.UserManager;
 import net.gravitydevelopment.anticheat.util.Group;
 import net.gravitydevelopment.anticheat.xray.XRayTracker;
+
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -190,6 +191,8 @@ public class AntiCheatAPI {
         return AntiCheat.getManager();
     }
 
+    // TODO: I'm pretty sure there's a better solution to this
+    @SuppressWarnings("restriction")
     private static String getCallingClass() {
         return sun.reflect.Reflection.getCallerClass(2).getName();
     }

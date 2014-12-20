@@ -18,14 +18,13 @@
 
 package net.gravitydevelopment.anticheat.config;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.util.enterprise.Database;
-import org.bukkit.Bukkit;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.bukkit.Bukkit;
 
 public class ConfigurationTable {
 

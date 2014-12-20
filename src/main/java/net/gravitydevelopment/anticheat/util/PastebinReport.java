@@ -21,11 +21,14 @@ package net.gravitydevelopment.anticheat.util;
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+
+import com.google.common.base.Charsets;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -126,7 +129,7 @@ public class PastebinReport {
         append("Max Memory: " + runtime.maxMemory() / 1024 / 1024 + "MB");
         append("Total Memory: " + runtime.totalMemory() / 1024 / 1024 + "MB");
         append("Online Mode: " + Bukkit.getOnlineMode());
-        append("Players: " + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers());
+        append("Players: " + Utilities.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers());
         append("Plugin Count: " + Bukkit.getPluginManager().getPlugins().length);
         append("Plugin Uptime: " + ((System.currentTimeMillis() - AntiCheat.getPlugin().getLoadTime()) / 1000) / 60 + " minutes");
         append("Enterprise: " + config.getConfig().enterprise.getValue());
@@ -142,13 +145,16 @@ public class PastebinReport {
     private void appendMagicDiff() {
         // This is hacky, and I like it
         Magic magic = AntiCheat.getManager().getConfiguration().getMagic();
-        FileConfiguration file = YamlConfiguration.loadConfiguration(AntiCheat.getPlugin().getResource("magic.yml"));
+        // dmulloy2 start - specify charset
+        InputStreamReader reader = new InputStreamReader(AntiCheat.getPlugin().getResource("magic.yml"), Charsets.UTF_8);
+        FileConfiguration file = YamlConfiguration.loadConfiguration(reader);
+        // dmulloy2 end
         boolean changed = false;
         for (Field field : Magic.class.getFields()) {
             Object defaultValue = file.get(field.getName());
             try {
                 Field value = magic.getClass().getDeclaredField(field.getName());
-                boolean x = false;
+                // boolean x = false; // dmulloy2 - unused variable
                 String s1 = value.get(magic).toString();
                 String s2 = defaultValue.toString();
                 if (!s1.equals(s2) && !s1.equals(s2 + ".0")) {

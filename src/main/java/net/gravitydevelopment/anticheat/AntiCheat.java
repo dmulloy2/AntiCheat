@@ -18,27 +18,30 @@
 
 package net.gravitydevelopment.anticheat;
 
-import com.comphenix.protocol.ProtocolLibrary;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.gravitydevelopment.anticheat.command.CommandHandler;
 import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.event.*;
+import net.gravitydevelopment.anticheat.event.BlockListener;
+import net.gravitydevelopment.anticheat.event.EntityListener;
+import net.gravitydevelopment.anticheat.event.InventoryListener;
+import net.gravitydevelopment.anticheat.event.PlayerListener;
+import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.manage.PacketManager;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
 import net.gravitydevelopment.anticheat.xray.XRayListener;
 import net.gravitydevelopment.anticheat.xray.XRayTracker;
 import net.gravitydevelopment.updater.Updater;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AntiCheat extends JavaPlugin {
 
@@ -51,7 +54,7 @@ public class AntiCheat extends JavaPlugin {
     private static boolean verbose;
     private static boolean developer;
     private static final int PROJECT_ID = 38723;
-    private static PacketManager packetManager;
+    // private static PacketManager packetManager; TODO
     private static boolean protocolLib = false;
     private static Long loadTime;
 
@@ -100,13 +103,14 @@ public class AntiCheat extends JavaPlugin {
         cleanup();
     }
 
-    private void setupProtocol() {
+    // TODO
+    /* private void setupProtocol() {
         if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
             protocolLib = true;
             packetManager = new PacketManager(ProtocolLibrary.getProtocolManager(), this, manager);
             verboseLog("Hooked into ProtocolLib");
         }
-    }
+    } */
 
     private void setupXray() {
         final XRayTracker xtracker = manager.getXRayTracker();
