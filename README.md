@@ -1,9 +1,13 @@
 AntiCheat
 =============
 
+This is an unofficial continuation of Gravitylow's AntiCheat by dmulloy2.
+
 AntiCheat helps server admins easily identify and block malicious users by monitoring and analyzing the behaviour of their players.
 
-[![Build Status](https://travis-ci.org/gravitylow/AntiCheat.png?branch=master)](https://travis-ci.org/gravitylow/AntiCheat)
+Resources
+-------
+* [Downloads](http://ci.shadowvolt.com/job/AntiCheat)
 
 Usage
 -------
