@@ -22,7 +22,6 @@ import java.io.File;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
@@ -44,6 +43,7 @@ import net.gravitydevelopment.anticheat.config.providers.Levels;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
 import net.gravitydevelopment.anticheat.config.providers.Rules;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+import net.gravitydevelopment.anticheat.util.Utilities;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -71,7 +71,7 @@ public class Configuration {
         // Now load others
         enterprise = new Enterprise(plugin, this);
 
-        flatfiles = Arrays.asList(config, enterprise); // dmulloy2
+        flatfiles = Utilities.asList(config, enterprise); // dmulloy2
         /* flatfiles = new ArrayList<ConfigurationFile>() {{
             add(config);
             add(enterprise);

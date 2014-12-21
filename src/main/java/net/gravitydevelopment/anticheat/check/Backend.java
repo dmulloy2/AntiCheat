@@ -1071,7 +1071,7 @@ public class Backend {
         int level = chatLevel.containsKey(user.getName()) ? chatLevel.get(user.getName()) : 0;
         if (player != null && player.isOnline() && level >= magic.CHAT_ACTION_ONE_LEVEL()) {
             String event = level >= magic.CHAT_ACTION_TWO_LEVEL() ? manager.getConfiguration().getConfig().chatSpamActionTwo.getValue() : manager.getConfiguration().getConfig().chatSpamActionOne.getValue();
-            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.stringToList(event), CheckType.CHAT_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
+            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.asList(event), CheckType.CHAT_SPAM, lang.SPAM_KICK_REASON(), Utilities.asList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
         }
         chatLevel.put(user.getName(), level + 1);
     }
@@ -1081,7 +1081,7 @@ public class Backend {
         int level = commandLevel.containsKey(user.getName()) ? commandLevel.get(user.getName()) : 0;
         if (player != null && player.isOnline() && level >= magic.COMMAND_ACTION_ONE_LEVEL()) {
             String event = level >= magic.COMMAND_ACTION_TWO_LEVEL() ? manager.getConfiguration().getConfig().commandSpamActionTwo.getValue() : manager.getConfiguration().getConfig().commandSpamActionOne.getValue();
-            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.stringToList(event), CheckType.COMMAND_SPAM, lang.SPAM_KICK_REASON(), Utilities.stringToList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
+            manager.getUserManager().execute(manager.getUserManager().getUser(player.getName()), Utilities.asList(event), CheckType.COMMAND_SPAM, lang.SPAM_KICK_REASON(), Utilities.asList(lang.SPAM_WARNING()), lang.SPAM_BAN_REASON());
         }
         commandLevel.put(user.getName(), level + 1);
     }

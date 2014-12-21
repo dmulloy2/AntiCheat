@@ -478,15 +478,18 @@ public final class Utilities {
     }
 
     /**
-     * Create a list with the given string for execution
-     *
-     * @param string the string to parse
-     * @return ArrayList with string
+     * Creates a list with given elements.
+     * @param elements Elements
+     * @return The list
      */
-    // dmulloy2 start - use more efficient Arrays.asList()
-    public static List<String> stringToList(final String string) {
-        // return new ArrayList<String>() {{ add(string); }};
-        return Arrays.asList(string);
+    // dmulloy2 start - new method
+    public static <E> List<E> asList(E... elements) {
+        List<E> ret = new ArrayList<E>();
+        for (E element : elements) {
+            ret.add(element);
+        }
+
+        return ret;
     }
     // dmulloy2 end
 
