@@ -719,7 +719,7 @@ public class Backend {
                 if (!silentMode()) {
                     player.sendMessage(ChatColor.RED + "[AntiCheat] Fastplacing detected. Please wait 10 seconds before placing blocks.");
                 }
-                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastBreakViolation.get(name) + " times in a row (max=" + violations + ")");
+                return new CheckResult(CheckResult.Result.FAILED, player.getName() + " placed blocks too fast " + fastPlaceViolation.get(name) + " times in a row (max=" + violations + ")");
             } else if (lastBlockPlaced.get(name) > 0 && math > magic.FASTPLACE_MAXVIOLATIONTIME()) {
                 AntiCheat.debugLog("Reset facePlaceViolation for " + name);
                 fastPlaceViolation.put(name, 0);
