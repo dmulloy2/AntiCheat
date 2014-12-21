@@ -18,7 +18,6 @@
 
 package net.gravitydevelopment.anticheat;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +33,11 @@ import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
 import net.gravitydevelopment.anticheat.xray.XRayListener;
 import net.gravitydevelopment.anticheat.xray.XRayTracker;
-import net.gravitydevelopment.updater.Updater;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AntiCheat extends JavaPlugin {
@@ -53,8 +50,8 @@ public class AntiCheat extends JavaPlugin {
     private static Configuration config;
     private static boolean verbose;
     private static boolean developer;
-    private static final int PROJECT_ID = 38723;
-    // private static PacketManager packetManager; TODO
+    ;// private static final int PROJECT_ID = 38723; // dmulloy2
+    // private static PacketManager packetManager; // TODO
     private static boolean protocolLib = false;
     private static Long loadTime;
 
@@ -74,8 +71,8 @@ public class AntiCheat extends JavaPlugin {
         setupXray();
         setupEvents();
         setupCommands();
-        setupUpdater();
-        // setupProtocol(); TODO
+        // setupUpdater(); // dmulloy2
+        // setupProtocol(); // TODO
         // Enterprise must come before levels
         setupEnterprise();
         restoreLevels();
@@ -151,7 +148,7 @@ public class AntiCheat extends JavaPlugin {
         verboseLog("Registered commands.");
     }
 
-    private void setupUpdater() {
+    /* private void setupUpdater() {
         if (config.getConfig().autoUpdate.getValue()) {
             final File file = this.getFile();
             final Plugin plugin = this;
@@ -168,7 +165,7 @@ public class AntiCheat extends JavaPlugin {
                 }
             });
         }
-    }
+    } */
 
     private void setupConfig() {
         config = manager.getConfiguration();
