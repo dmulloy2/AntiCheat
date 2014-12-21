@@ -23,6 +23,7 @@ import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
 import net.gravitydevelopment.anticheat.util.Utilities;
+
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
@@ -30,6 +31,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 
 public class EntityListener extends EventListener {
@@ -95,6 +97,7 @@ public class EntityListener extends EventListener {
         boolean noHack = true;
         if (event instanceof EntityDamageByEntityEvent) {
             EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
+            boolean explosion = event.getCause() == DamageCause.BLOCK_EXPLOSION || event.getCause() == DamageCause.ENTITY_EXPLOSION;
             if (event.getEntity() instanceof Player) {
                 Player player = (Player) event.getEntity();
                 // Keep players from shooting an arrow at themselves in order to fly
@@ -112,9 +115,9 @@ public class EntityListener extends EventListener {
                     getBackend().logDamage(p, 1);
                     int value = p.getInventory().getItemInHand().containsEnchantment(Enchantment.KNOCKBACK) ? 2 : 1;
                     getBackend().logDamage(player, value);
-                    if (getCheckManager().willCheck(p, CheckType.LONG_REACH)) {
+                    if (getCheckManager().willCheck(p, CheckType.LONG_REACH) && !explosion) {
                         Distance distance = new Distance(player.getLocation(), p.getLocation());
-                        CheckResult result = getBackend().checkLongReachDamage(player, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
+                        CheckResult result = getBackend().checkLongReachDamage(p, distance.getXDifference(), distance.getYDifference(), distance.getZDifference());
                         if (result.failed()) {
                             event.setCancelled(!silentMode());
                             log(result.getMessage(), p, CheckType.LONG_REACH);
@@ -148,7 +151,7 @@ public class EntityListener extends EventListener {
                         noHack = false;
                     }
                 }
-                if (getCheckManager().willCheck(player, CheckType.NO_SWING)) {
+                if (getCheckManager().willCheck(player, CheckType.NO_SWING) && !explosion) {
                     CheckResult result = getBackend().checkAnimation(player, event.getEntity());
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
