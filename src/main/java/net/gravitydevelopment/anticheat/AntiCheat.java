@@ -232,13 +232,13 @@ public class AntiCheat extends JavaPlugin {
     }
 
     public static void debugLog(final String string) {
-        Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
-            public void run() {
-                if (developer) {
+        if (developer) {
+            Bukkit.getScheduler().runTask(getPlugin(), new Runnable() {
+                public void run() {
                     manager.debugLog("[DEBUG] " + string);
                 }
-            }
-        });
+            });
+        }
     }
 
     public void verboseLog(final String string) {
