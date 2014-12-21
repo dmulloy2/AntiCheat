@@ -669,7 +669,7 @@ public class Backend {
             }
         } else {
             Long math = System.currentTimeMillis() - lastBlockBroken.get(name);
-            if ((math != 0L && timemax != 0L)) {
+            if (timemax != 0) {
                 if (math < timemax) {
                     if (fastBreakViolation.containsKey(name) && fastBreakViolation.get(name) > 0) {
                         fastBreakViolation.put(name, fastBreakViolation.get(name) + 1);
