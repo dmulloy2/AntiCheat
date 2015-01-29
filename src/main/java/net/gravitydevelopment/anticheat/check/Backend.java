@@ -18,14 +18,21 @@
 
 package net.gravitydevelopment.anticheat.check;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.config.providers.Lang;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Distance;
+import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Utilities;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -36,9 +43,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.*;
 
 public class Backend {
     private List<String> isInWater = new ArrayList<String>();
@@ -371,6 +377,12 @@ public class Backend {
         Block block = player.getLocation().getBlock();
 
         if (player.getVehicle() == null && !player.isFlying()) {
+            // dmulloy2 - check for DEPTH_STRIDER enchantment
+            ItemStack helmet = player.getInventory().getHelmet();
+            if (helmet != null && helmet.containsEnchantment(Enchantment.DEPTH_STRIDER)) {
+                return PASS;
+            }
+
             if (block.isLiquid()) {
                 if (isInWater.contains(player.getName())) {
                     if (isInWaterCache.contains(player.getName())) {
