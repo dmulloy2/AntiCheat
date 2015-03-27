@@ -180,6 +180,11 @@ public class Backend {
     }
 
     public CheckResult checkFastBow(Player player, float force) {
+        if (!bowWindUp.containsKey(player.getName())) {
+            // TODO: The absence of this check causes a NPE, maybe try to figure out a permanent solution
+            return PASS;
+        }
+        
         // Ignore magic numbers here, they are minecrafty vanilla stuff.
         int ticks = (int) ((((System.currentTimeMillis() - bowWindUp.get(player.getName())) * 20) / 1000) + 3);
         bowWindUp.remove(player.getName());
