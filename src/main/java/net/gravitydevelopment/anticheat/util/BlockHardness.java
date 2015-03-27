@@ -120,7 +120,7 @@ public enum BlockHardness {
     LEAVES(0.20D),
     LEAVES_2(0.20D),
     LEVER(0.50D),
-    LOCKED_CHEST(0.00D),
+    // LOCKED_CHEST(0.00D),
     LOG(2.00D),
     LOG_2(2.00D),
     LONG_GRASS(0.00D),
