@@ -52,7 +52,7 @@ public class CommandReport extends CommandBase {
         if (args.length >= 1) {
             int page = 1;
             if (args.length == 2) {
-                if (Utilities.isInt(args[1])) {
+                if (Util.isInt(args[1])) {
                     page = Integer.parseInt(args[1]);
                 } else {
                     cs.sendMessage(RED + "Not a valid page number: " + WHITE + args[1]);

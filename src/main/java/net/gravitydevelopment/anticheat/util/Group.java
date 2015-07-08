@@ -83,6 +83,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return name + " : " + level + " : " + color.name() + " : " + Utilities.listToCommaString(actions);
+        return name + " : " + level + " : " + color.name() + " : " + Util.listToCommaString(actions);
     }
 }

@@ -21,7 +21,7 @@ package net.gravitydevelopment.anticheat.util.enterprise;
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -74,11 +74,11 @@ public class Database {
         this.schema = schema;
         this.serverName = serverName;
 
-        this.logInterval = Utilities.lifeToSeconds(logInterval);
-        this.logLife = Utilities.lifeToSeconds(logLife);
+        this.logInterval = Util.lifeToSeconds(logInterval);
+        this.logLife = Util.lifeToSeconds(logLife);
 
         this.syncLevels = syncLevels;
-        this.syncInterval = Utilities.lifeToSeconds(syncInterval);
+        this.syncInterval = Util.lifeToSeconds(syncInterval);
 
         sqlLogEvent = "INSERT INTO " + prefix + EVENTS_TABLE +
                 " (server, user, check_type) " +

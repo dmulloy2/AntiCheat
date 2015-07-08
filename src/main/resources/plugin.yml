@@ -1,16 +1,17 @@
-author: Gravity
-description: AntiCheat helps easily identify and block malicious users on your server.
-main: net.gravitydevelopment.anticheat.AntiCheat
 name: AntiCheat
+main: net.gravitydevelopment.anticheat.AntiCheat
+authors: [Gravity, dmulloy2]
+version: ${project.build.version}
 softdepend: [ProtocolLib]
 startup: postworld
-url: http://gravitydevelopment.net
-version: ${project.build.version}
+description: AntiCheat helps easily identify and block malicious users on your server.
+
 commands:
   anticheat:
     description: Control and view info about AntiCheat
     usage: /anticheat help
     aliases: anti
+
 permissions:
   anticheat.system.notice:
     description: See broadcasts when a player is kicked or banned for hacking

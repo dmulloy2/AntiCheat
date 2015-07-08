@@ -30,7 +30,7 @@ import net.gravitydevelopment.anticheat.event.PlayerListener;
 import net.gravitydevelopment.anticheat.event.VehicleListener;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
 import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 import net.gravitydevelopment.anticheat.xray.XRayListener;
 import net.gravitydevelopment.anticheat.xray.XRayTracker;
 
@@ -124,7 +124,7 @@ public class AntiCheat extends JavaPlugin {
                                 List<String> alert = new ArrayList<String>();
                                 alert.add(ChatColor.YELLOW + "[ALERT] " + ChatColor.WHITE + name + ChatColor.YELLOW + " might be using xray.");
                                 alert.add(ChatColor.YELLOW + "[ALERT] Please check their xray stats using " + ChatColor.WHITE + "/anticheat xray " + name + ChatColor.YELLOW + ".");
-                                Utilities.alert(alert);
+                                Util.alert(alert);
                                 xtracker.logAlert(name);
                             }
                         }

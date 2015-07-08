@@ -22,7 +22,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.util.User;
 import net.gravitydevelopment.anticheat.util.Group;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 import org.bukkit.GameMode;
 
 import java.lang.reflect.Constructor;
@@ -106,7 +106,7 @@ public class Rule {
     }
 
     public Rule(String string, Type type) {
-        Rule.string = Utilities.removeWhitespace(string).toLowerCase();
+        Rule.string = Util.removeWhitespace(string).toLowerCase();
         this.type = type;
     }
 
@@ -171,9 +171,9 @@ public class Rule {
     }
 
     protected void setVariable(String variable, String value, User user) {
-        if (variable.equals("player_level") && Utilities.isInt(value)) {
+        if (variable.equals("player_level") && Util.isInt(value)) {
             user.setLevel(Integer.parseInt(value));
-        } else if (variable.equals("player_group") && Utilities.isInt(value)) {
+        } else if (variable.equals("player_group") && Util.isInt(value)) {
             for (Group group : AntiCheat.getManager().getConfiguration().getGroups().getGroups()) {
                 if (group.getName().equalsIgnoreCase(value)) {
                     user.setLevel(group.getLevel());
@@ -185,7 +185,7 @@ public class Rule {
                 user.getPlayer().setGameMode(mode);
             } catch (IllegalArgumentException ex) {
             }
-        } else if (variable.equals("player_health") && Utilities.isDouble(value)) {
+        } else if (variable.equals("player_health") && Util.isDouble(value)) {
             user.getPlayer().setHealth(Double.parseDouble(value));
         }
     }

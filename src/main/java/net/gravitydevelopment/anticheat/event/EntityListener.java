@@ -19,20 +19,25 @@
 package net.gravitydevelopment.anticheat.event;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
-import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.CheckResult;
+import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public class EntityListener extends EventListener {
 
@@ -107,7 +112,7 @@ public class EntityListener extends EventListener {
                         event.setCancelled(true);
                     }
                 }
-                if (Utilities.hasArmorEnchantment(player, Enchantment.THORNS)) {
+                if (Util.hasArmorEnchantment(player, Enchantment.THORNS)) {
                     getBackend().logAnimation(player);
                 }
                 if (e.getDamager() instanceof Player) {
@@ -144,11 +149,41 @@ public class EntityListener extends EventListener {
                     }
                 }
                 if (getCheckManager().willCheck(player, CheckType.FORCEFIELD)) {
+                    CheckResult result = getBackend().checkFightSpeed(player);
+                    if (result.failed()) {
+                        event.setCancelled(!silentMode());
+                        log(result.getMessage(), player, CheckType.AUTOTOOL);
+                        noHack = false;
+                    }
+                }
+                if (getCheckManager().willCheck(player, CheckType.FORCEFIELD)) {
                     CheckResult result = getBackend().checkSprintDamage(player);
                     if (result.failed()) {
                         event.setCancelled(!silentMode());
                         log(result.getMessage(), player, CheckType.FORCEFIELD);
                         noHack = false;
+                    }
+                }
+                if (getCheckManager().willCheck(player, CheckType.DIRECTION)) {
+                    if (event.getEntity() instanceof LivingEntity) {
+                        LivingEntity damaged = (LivingEntity) event.getEntity();
+                        CheckResult result = getBackend().checkFightRotation(player, damaged);
+                        if (result.failed()) {
+                            event.setCancelled(!silentMode());
+                            log(result.getMessage(), player, CheckType.DIRECTION);
+                            noHack = false;
+                        }
+                    }
+                }
+                if (getCheckManager().willCheck(player, CheckType.FORCEFIELD)) {
+                    if (event.getEntity() instanceof LivingEntity) {
+                        LivingEntity damaged = (LivingEntity) event.getEntity();
+                        CheckResult result = getBackend().checkFightDistance(player, damaged);
+                        if (result.failed()) {
+                            event.setCancelled(!silentMode());
+                            log(result.getMessage(), player, CheckType.FORCEFIELD);
+                            noHack = false;
+                        }
                     }
                 }
                 if (getCheckManager().willCheck(player, CheckType.NO_SWING) && !explosion) {

@@ -23,7 +23,7 @@ import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.config.Configuration;
 import net.gravitydevelopment.anticheat.util.Group;
 import net.gravitydevelopment.anticheat.util.User;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -189,7 +189,7 @@ public class UserManager {
                 messageArray.add(message);
             }
         }
-        Utilities.alert(messageArray);
+        Util.alert(messageArray);
         execute(user, group.getActions(), type);
     }
 
@@ -224,15 +224,17 @@ public class UserManager {
                     event = event.replaceAll("&player", name).replaceAll("&world", user.getPlayer().getWorld().getName()).replaceAll("&check", type.name());
 
                     if (event.startsWith("COMMAND[")) {
-                        for (String cmd : Utilities.getCommands(event)) {
+                        for (String cmd : Util.getCommands(event)) {
                             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
                         }
                     } else if (event.equalsIgnoreCase("KICK")) {
-                        user.getPlayer().kickPlayer(RED + kickReason);
-                        String msg = RED + config.getLang().KICK_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
-                        if (!msg.equals("")) {
-                            manager.log(msg);
-                            manager.playerLog(msg);
+                        if (!AntiCheat.developerMode()) { // dmulloy2
+                            user.getPlayer().kickPlayer(RED + kickReason);
+                            String msg = RED + config.getLang().KICK_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
+                            if (!msg.equals("")) {
+                                manager.log(msg);
+                                manager.playerLog(msg);
+                            }
                         }
                     } else if (event.equalsIgnoreCase("WARN")) {
                         List<String> message = warning;
@@ -242,16 +244,18 @@ public class UserManager {
                             }
                         }
                     } else if (event.equalsIgnoreCase("BAN")) {
-                        // dmulloy2 start - use BanList
-                        Bukkit.getBanList(Type.NAME).addBan(user.getName(), banReason, null, "AntiCheat");
-                        // user.getPlayer().setBanned(true);
-                        // dmulloy2 end
-                        user.getPlayer().kickPlayer(RED + banReason);
-                        String msg = RED + config.getLang().BAN_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
-                        if (!msg.equals("")) {
-                            manager.log(msg);
-                            manager.playerLog(msg);
+                        // dmulloy2 start - check for dev mode, use BanList
+                        if (!AntiCheat.developerMode()) {
+                            Bukkit.getBanList(Type.NAME).addBan(user.getName(), banReason, null, "AntiCheat");
+                            // user.getPlayer().setBanned(true);
+                            user.getPlayer().kickPlayer(RED + banReason);
+                            String msg = RED + config.getLang().BAN_BROADCAST().replaceAll("&player", name) + " (" + CheckType.getName(type) + ")";
+                            if (!msg.equals("")) {
+                                manager.log(msg);
+                                manager.playerLog(msg);
+                            }
                         }
+                        // dmulloy2 end
                     } else if (event.equalsIgnoreCase("RESET")) {
                         user.resetLevel();
                     }
@@ -259,5 +263,4 @@ public class UserManager {
             }
         });
     }
-
 }

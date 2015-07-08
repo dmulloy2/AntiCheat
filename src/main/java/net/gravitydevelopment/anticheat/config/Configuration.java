@@ -43,7 +43,7 @@ import net.gravitydevelopment.anticheat.config.providers.Levels;
 import net.gravitydevelopment.anticheat.config.providers.Magic;
 import net.gravitydevelopment.anticheat.config.providers.Rules;
 import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -71,7 +71,7 @@ public class Configuration {
         // Now load others
         enterprise = new Enterprise(plugin, this);
 
-        flatfiles = Utilities.asList(config, enterprise); // dmulloy2
+        flatfiles = Util.asList(config, enterprise); // dmulloy2
         /* flatfiles = new ArrayList<ConfigurationFile>() {{
             add(config);
             add(enterprise);

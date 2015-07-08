@@ -22,7 +22,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.check.CheckResult;
 import net.gravitydevelopment.anticheat.util.Distance;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,7 +36,7 @@ public class BlockListener extends EventListener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockDamage(BlockDamageEvent event) {
         Player player = event.getPlayer();
-        if (event.getInstaBreak() || Utilities.isInstantBreak(event.getBlock().getType())) {
+        if (event.getInstaBreak() || Util.isInstantBreak(event.getBlock().getType())) {
             getBackend().logInstantBreak(player);
         }
         if (getCheckManager().willCheck(player, CheckType.AUTOTOOL)) {
@@ -96,6 +96,14 @@ public class BlockListener extends EventListener {
                 if (result.failed()) {
                     event.setCancelled(!silentMode());
                     log(result.getMessage(), player, CheckType.LONG_REACH);
+                    noHack = false;
+                }
+            }
+            if (getCheckManager().willCheck(player, CheckType.DIRECTION)) {
+                result = getBackend().checkBlockRotation(player, event);
+                if (result.failed()) {
+                    event.setCancelled(!silentMode());
+                    log(result.getMessage(), player, CheckType.DIRECTION);
                     noHack = false;
                 }
             }

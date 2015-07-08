@@ -47,8 +47,11 @@ public enum Permission {
     CHECK_FASTPROJECTILE,
     CHECK_ITEMSPAM,
     CHECK_VISUAL,
+    CHECK_VELOCITY,
     CHECK_FASTINVENTORY,
     CHECK_AUTOTOOL,
+    CHECK_MOREPACKETS,
+    CHECK_DIRECTION,
 
     /* System Nodes */
     SYSTEM_LOG,
@@ -63,7 +66,9 @@ public enum Permission {
     SYSTEM_CALIBRATE,
     SYSTEM_CHECK,
     SYSTEM_DEBUG,
-    SYSTEM_RELOAD;
+    SYSTEM_ALERTALL,
+    SYSTEM_RELOAD,
+    ;
 
     private static final String PERMISSION_ALL = "anticheat.*";
     private static final String PERMISSION_SPAM = "anticheat.check.spam";

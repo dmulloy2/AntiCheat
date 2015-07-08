@@ -206,7 +206,7 @@ public class User {
      * @return true if the location was valid and set properly
      */
     public boolean setGoodLocation(Location location) {
-        if (Utilities.cantStandAtExp(location) || (location.getBlock().isLiquid() && !Utilities.isFullyInWater(location))) {
+        if (Util.cantStandAtExp(location) || (location.getBlock().isLiquid() && !Util.isFullyInWater(location))) {
             return false;
         }
 

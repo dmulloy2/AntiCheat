@@ -18,18 +18,24 @@
 
 package net.gravitydevelopment.anticheat.event;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.check.Backend;
 import net.gravitydevelopment.anticheat.check.CheckType;
 import net.gravitydevelopment.anticheat.config.Configuration;
-import net.gravitydevelopment.anticheat.manage.*;
+import net.gravitydevelopment.anticheat.manage.AntiCheatManager;
+import net.gravitydevelopment.anticheat.manage.CheckManager;
+import net.gravitydevelopment.anticheat.manage.UserManager;
+import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.User;
+import net.gravitydevelopment.anticheat.util.Util;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EventListener implements Listener {
     private static final Map<CheckType, Integer> USAGE_LIST = new EnumMap<CheckType, Integer>(CheckType.class);
@@ -46,6 +52,13 @@ public class EventListener implements Listener {
             logCheat(type, user);
             if (user.increaseLevel(type) && message != null) {
                 AntiCheat.getManager().log(message);
+                // dmulloy2 start
+                for (Player online : Util.getOnlinePlayers()) {
+                    if (Permission.SYSTEM_ALERTALL.get(online) && !silentMode()) {
+                        online.sendMessage(ChatColor.RED + "[AntiCheat] " + message);
+                    }
+                }
+                // dmulloy2 end
             }
             removeDecrease(user);
         }

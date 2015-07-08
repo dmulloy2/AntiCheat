@@ -22,7 +22,7 @@ import net.gravitydevelopment.anticheat.AntiCheat;
 import net.gravitydevelopment.anticheat.command.CommandBase;
 import net.gravitydevelopment.anticheat.util.Permission;
 import net.gravitydevelopment.anticheat.util.SpyState;
-import net.gravitydevelopment.anticheat.util.Utilities;
+import net.gravitydevelopment.anticheat.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,10 +55,10 @@ public class CommandSpy extends CommandBase {
                                 p.hidePlayer(sender);
                             }
                         }
-                        if (!sender.hasMetadata(Utilities.SPY_METADATA)) // Maintain ORIGINAL location and other data
+                        if (!sender.hasMetadata(Util.SPY_METADATA)) // Maintain ORIGINAL location and other data
                         {
                             SpyState state = new SpyState(sender.getAllowFlight(), sender.isFlying(), sender.getLocation());
-                            sender.setMetadata(Utilities.SPY_METADATA, new FixedMetadataValue(AntiCheat.getPlugin(), state));
+                            sender.setMetadata(Util.SPY_METADATA, new FixedMetadataValue(AntiCheat.getPlugin(), state));
                         }
                         sender.setAllowFlight(true);
                         sender.setFlying(true);
@@ -69,12 +69,12 @@ public class CommandSpy extends CommandBase {
                         cs.sendMessage(RED + "Player: " +args[0] + " not found.");
                     }
                 } else {
-                    if (sender.hasMetadata(Utilities.SPY_METADATA)) {
-                        SpyState state = ((SpyState) sender.getMetadata(Utilities.SPY_METADATA).get(0).value());
+                    if (sender.hasMetadata(Util.SPY_METADATA)) {
+                        SpyState state = ((SpyState) sender.getMetadata(Util.SPY_METADATA).get(0).value());
                         sender.setAllowFlight(state.getAllowFlight());
                         sender.setFlying(state.getFlying());
                         sender.teleport(state.getLocation());
-                        sender.removeMetadata(Utilities.SPY_METADATA, AntiCheat.getPlugin());
+                        sender.removeMetadata(Util.SPY_METADATA, AntiCheat.getPlugin());
                         for (Player p : cs.getServer().getOnlinePlayers()) {
                             p.showPlayer(sender);
                         }

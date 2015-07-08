@@ -1,4 +1,4 @@
-/*
+/**
  * AntiCheat for Bukkit.
  * Copyright (C) 2012-2014 AntiCheat Team | http://gravitydevelopment.net
  *
@@ -15,8 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.gravitydevelopment.anticheat.util;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.gravitydevelopment.anticheat.AntiCheat;
 
@@ -29,18 +38,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public final class Utilities {
+public final class Util {
     private static final List<Material> INSTANT_BREAK = new ArrayList<Material>();
     private static final List<Material> FOOD = new ArrayList<Material>();
     private static final List<Material> INTERACTABLE = new ArrayList<Material>();
@@ -48,7 +48,6 @@ public final class Utilities {
 
     public static final String SPY_METADATA = "ac-spydata";
 
-    // dmulloy2 start - backwards compatiblity
     private static Method getOnlinePlayers;
 
     /**
@@ -70,7 +69,19 @@ public final class Utilities {
         return (List<Player>) Bukkit.getOnlinePlayers();
     }
 
-    // dmulloy2 end
+    /**
+     * Creates a list with given elements.
+     * @param elements Elements
+     * @return The list
+     */
+    public static <E> List<E> asList(E... elements) {
+        List<E> ret = new ArrayList<E>();
+        for (E element : elements) {
+            ret.add(element);
+        }
+
+        return ret;
+    }
 
     /**
      * Send a hack level alert to players and console
@@ -88,6 +99,162 @@ public final class Utilities {
         for (String msg : message) {
             AntiCheat.getManager().log(msg);
         }
+    }
+
+    public static double getXDelta(Location one, Location two) {
+        return Math.abs(one.getX() - two.getX());
+    }
+
+    public static double getZDelta(Location one, Location two) {
+        return Math.abs(one.getZ() - two.getZ());
+    }
+
+    /**
+     * Gets the three dimensional distance between two Locations
+     * @param one the first location
+     * @param two the second location
+     * @return the distance
+     */
+    public static double getDistance3D(Location one, Location two) {
+        double toReturn = 0.0;
+        double xSqr = (two.getX() - one.getX()) * (two.getX() - one.getX());
+        double ySqr = (two.getY() - one.getY()) * (two.getY() - one.getY());
+        double zSqr = (two.getZ() - one.getZ()) * (two.getZ() - one.getZ());
+        double sqrt = Math.sqrt(xSqr + ySqr + zSqr);
+        toReturn = Math.abs(sqrt);
+        return toReturn;
+    }
+
+    /* public static double getDistance3D(SimpleLocation one, SimpleLocation two) {
+        double toReturn = 0.0;
+        double xSqr = (two.getX() - one.getX()) * (two.getX() - one.getX());
+        double ySqr = (two.getY() - one.getY()) * (two.getY() - one.getY());
+        double zSqr = (two.getZ() - one.getZ()) * (two.getZ() - one.getZ());
+        double sqrt = Math.sqrt(xSqr + ySqr + zSqr);
+        toReturn = Math.abs(sqrt);
+        return toReturn;
+    } */
+
+    /**
+     * Gets the horizontal distance between two Locations
+     * @param one the first location
+     * @param two the second location
+     * @return the horizontal distance between the two points
+     */
+    public static double getHorizontalDistance(Location one, Location two) {
+        double toReturn = 0.0;
+        double xSqr = (two.getX() - one.getX()) * (two.getX() - one.getX());
+        double zSqr = (two.getZ() - one.getZ()) * (two.getZ() - one.getZ());
+        double sqrt = Math.sqrt(xSqr + zSqr);
+        toReturn = Math.abs(sqrt);
+        return toReturn;
+    }
+
+    /* public static double getHorizontalDistance(SimpleLocation one, SimpleLocation two) {
+        double toReturn = 0.0;
+        double xSqr = (two.getX() - one.getX()) * (two.getX() - one.getX());
+        double zSqr = (two.getZ() - one.getZ()) * (two.getZ() - one.getZ());
+        double sqrt = Math.sqrt(xSqr + zSqr);
+        toReturn = Math.abs(sqrt);
+        return toReturn;
+    } */
+
+    /**
+     * Determine whether or not a player can stand in a given location, 
+     * and do so correctly
+     * 
+     * @param theBlock The block to be checked
+     * @return true if the player should be unable to stand here
+     */
+    public static boolean cantStandAtBetter(Block block) {
+        Block otherBlock = block.getRelative(BlockFace.DOWN);
+
+        boolean center1 = otherBlock.getType() == Material.AIR;
+        boolean north1 = otherBlock.getRelative(BlockFace.NORTH).getType() == Material.AIR;
+        boolean east1 = otherBlock.getRelative(BlockFace.EAST).getType() == Material.AIR;
+        boolean south1 = otherBlock.getRelative(BlockFace.SOUTH).getType() == Material.AIR;
+        boolean west1 = otherBlock.getRelative(BlockFace.WEST).getType() == Material.AIR;
+        boolean northeast1 = otherBlock.getRelative(BlockFace.NORTH_EAST).getType() == Material.AIR;
+        boolean northwest1 = otherBlock.getRelative(BlockFace.NORTH_WEST).getType() == Material.AIR;
+        boolean southeast1 = otherBlock.getRelative(BlockFace.SOUTH_EAST).getType() == Material.AIR;
+        boolean southwest1 = otherBlock.getRelative(BlockFace.SOUTH_WEST).getType() == Material.AIR;
+        boolean overAir1 = (otherBlock.getRelative(BlockFace.DOWN).getType() == Material.AIR || otherBlock.getRelative(BlockFace.DOWN).getType() == Material.WATER || otherBlock.getRelative(BlockFace.DOWN).getType() == Material.LAVA);
+
+        return (center1 && north1 && east1 && south1 && west1 && northeast1 && southeast1 && northwest1 && southwest1 && overAir1);
+    }
+
+    /**
+     * Check if only the block beneath them is standable (includes water + lava)
+     * @param block the block to check (under)
+     * @return true if they cannot stand there
+     */
+    public static boolean cantStandAtSingle(Block block) {
+        // TODO: Implement Better to reduce false positives
+        Block otherBlock = block.getRelative(BlockFace.DOWN);
+        boolean center = otherBlock.getType() == Material.AIR;
+        return center;
+    }
+
+    /**
+     * Eh, I got lazy; sue me.
+     * TODO: Improve
+     * @param block
+     * @return
+     */
+    public static boolean cantStandAtWater(Block block) {
+        Block otherBlock = block.getRelative(BlockFace.DOWN);
+        boolean isHover = block.getType() == Material.AIR;
+        boolean n = otherBlock.getRelative(BlockFace.NORTH).getType() == Material.WATER;
+        boolean s = otherBlock.getRelative(BlockFace.SOUTH).getType() == Material.WATER;
+        boolean e = otherBlock.getRelative(BlockFace.EAST).getType() == Material.WATER;
+        boolean w = otherBlock.getRelative(BlockFace.WEST).getType() == Material.WATER;
+        boolean ne = otherBlock.getRelative(BlockFace.NORTH_EAST).getType() == Material.WATER;
+        boolean nw = otherBlock.getRelative(BlockFace.NORTH_WEST).getType() == Material.WATER;
+        boolean se = otherBlock.getRelative(BlockFace.SOUTH_EAST).getType() == Material.WATER;
+        boolean sw = otherBlock.getRelative(BlockFace.SOUTH_WEST).getType() == Material.WATER;
+        return (n && s && e && w && ne && nw && se && sw && isHover);
+    }
+
+    /**
+     * What it says.
+     * @param block
+     * @return
+     */
+    public static boolean canStandWithin(Block block) {
+        boolean isSand = block.getType() == Material.SAND;
+        boolean isGravel = block.getType() == Material.GRAVEL;
+        boolean solid = block.getType().isSolid() && !(block.getType().name().toLowerCase().contains("door")) && !(block.getType().name().toLowerCase().contains("fence")) && !(block.getType().name().toLowerCase().contains("bars")) && !(block.getType().name().toLowerCase().contains("sign"));
+        return !isSand && !isGravel && !solid;
+    }
+
+    /**
+     * Get optimal rotation for looking between to points
+     * @param one the first location
+     * @param two the second location
+     * @return the vector for the rotation
+     */
+    public static Vector getRotation(Location one, Location two) {
+        double dx = two.getX() - one.getX();
+        double dy = two.getY() - one.getY();
+        double dz = two.getZ() - one.getZ();
+        double distanceXZ = Math.sqrt(dx * dx + dz * dz);
+        float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
+        float pitch = (float) -(Math.atan2(dy, distanceXZ) * 180.0D / Math.PI);
+        return new Vector(yaw, pitch, 0);
+    }
+
+    /**
+     * Clamp a rotation to fit into 180 degrees
+     * @param theta
+     * @return
+     */
+    public static double clamp180(double theta) {
+        theta %= 360;
+        if (theta >= 180.0D)
+            theta -= 360.0D;
+        if (theta < -180.0D)
+            theta += 360.0D;
+        return theta;
     }
 
     /**
@@ -478,22 +645,6 @@ public final class Utilities {
     }
 
     /**
-     * Creates a list with given elements.
-     * @param elements Elements
-     * @return The list
-     */
-    // dmulloy2 start - new method
-    public static <E> List<E> asList(E... elements) {
-        List<E> ret = new ArrayList<E>();
-        for (E element : elements) {
-            ret.add(element);
-        }
-
-        return ret;
-    }
-    // dmulloy2 end
-
-    /**
      * Create a comma-delimited string from a list
      *
      * @param list the list to parse
@@ -516,12 +667,13 @@ public final class Utilities {
      * @return seconds
      */
     public static long lifeToSeconds(String string) {
-        if (string.equals("0") || string.equals("")) return 0;
-        String[] lifeMatch = new String[]{ "d", "h", "m", "s" };
-        int[] lifeInterval = new int[]{ 86400, 3600, 60, 1 };
+        if (string.equals("0") || string.equals(""))
+            return 0;
+        String[] lifeMatch = new String[] { "d", "h", "m", "s" };
+        int[] lifeInterval = new int[] { 86400, 3600, 60, 1 };
         long seconds = 0L;
 
-        for (int i=0;i<lifeMatch.length;i++) {
+        for (int i = 0; i < lifeMatch.length; i++) {
             Matcher matcher = Pattern.compile("([0-9]*)" + lifeMatch[i]).matcher(string);
             while (matcher.find()) {
                 seconds += Integer.parseInt(matcher.group(1)) * lifeInterval[i];
@@ -530,7 +682,6 @@ public final class Utilities {
         }
         return seconds;
     }
-
 
     static {
         // START INSTANT BREAK MATERIALS
